@@ -231,7 +231,64 @@ public class SinglyLinkedList<E> implements List<E> {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
+    //Q9 merging two sorted lists.
+    public SinglyLinkedList<E> sortedMerge(SinglyLinkedList<E> other) {
+        SinglyLinkedList<E> result = new SinglyLinkedList<>();
+
+        Node<E> p1 = this.head;
+        Node<E> p2 = other.head;
+
+        while (p1 != null && p2 != null) {
+            Comparable<E> val1 = (Comparable<E>) p1.getElement();
+            E val2 = p2.getElement();
+
+            if (val1.compareTo(val2) <= 0) {
+                result.addLast(p1.getElement());
+                p1 = p1.getNext();
+            } else {
+                result.addLast(p2.getElement());
+                p2 = p2.getNext();
+            }
+        }
+        while (p1 != null) {
+            result.addLast(p1.getElement());
+            p1 = p1.getNext();
+        }
+
+        while (p2 != null) {
+            result.addLast(p2.getElement());
+            p2 = p2.getNext();
+        }
+
+        return result;
+    }
+
+    //Q10 reversed linked lists.
+    public void reverse() {
+        Node<E> prev = null;
+        Node<E> curr = head;
+        Node<E> next;
+        while(curr != null) {
+            next = curr.getNext();
+            curr.setNext(prev);
+            prev = curr;
+            curr = next;
+        }
+        head = prev;
+    }
+    //Q11 cloning linked lists.
+    public SinglyLinkedList<E> copy() {
+        SinglyLinkedList<E> twin = new SinglyLinkedList<E>();
+        Node<E> tmp = head;
+        while (tmp != null) {
+            twin.addLast(tmp.getElement());
+            tmp = tmp.next;
+        }
+        return twin;
+    }
+
+
+        public static void main(String[] args) {
         SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();
         System.out.println("ll " + ll + " isEmpty: " + ll.isEmpty());
         //LinkedList<Integer> ll = new LinkedList<Integer>();
@@ -250,5 +307,36 @@ public class SinglyLinkedList<E> implements List<E> {
         ll.remove(5);
         System.out.println(ll);
 
+            ll.reverse();
+            System.out.println("Reversed list: " + ll);
+
+            SinglyLinkedList<Integer> clonedList = ll.copy();
+            System.out.println("Cloned list:   " + clonedList);
+
+
+            clonedList.addFirst(99);
+            System.out.println("Modified Clone: " + clonedList);
+            System.out.println("Original List:  " + ll);
+
+            System.out.println("\nTesting Sorted Merge");
+
+            SinglyLinkedList<Integer> list1 = new SinglyLinkedList<>();
+            list1.addLast(1);
+            list1.addLast(3);
+            list1.addLast(5);
+
+            SinglyLinkedList<Integer> list2 = new SinglyLinkedList<>();
+            list2.addLast(2);
+            list2.addLast(4);
+            list2.addLast(6);
+            list2.addLast(8);
+
+            System.out.println("List 1: " + list1);
+            System.out.println("List 2: " + list2);
+
+            SinglyLinkedList<Integer> mergedList = list1.sortedMerge(list2);
+
+            System.out.println("Merged Result: " + mergedList);
+        }
     }
-}
+
