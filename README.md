@@ -14,3 +14,38 @@ Q8: Describe 2 possible use-cases for a circularly linked list (2-3 sentences fo
 
 2: The Clock: A clock is a physical circularly linked list of numbers. When the second hand reaches 60, it doesn't hit a null wall or stop, it simply rotates back to 1. This continuous loop allows the system to track infinite time using a finite set of nodes (1 through 12).
 
+lab2:
+Q2: Write the pseudocode for an algorithm which implements a Queue using two stacks.
+Provide implementations for the enqueue() and dequeue() methods.
+
+Algorithm enqueue(e):
+if stack2 is empty:
+    while stack1 is not empty:
+        stack2.push(stack1.pop())
+        stack1.add(e)
+
+
+
+
+Algorithm dequeue(e):
+if stack2 is empty: 
+   while stack1 is not empty:
+       stack2.push(stack1.pop())
+
+if stack2 is empty:
+    return error "Queue Underflow"
+        return stack2.pop()
+
+Q3:
+Write the pseudocode algorithm which reverses the elements on a Stack using two additional Stack's (no other data structures are allowed).
+
+Algorithm reverse:
+while stack1 is not empty:
+    stack2.push(stack1.pop())
+
+while stack2 is not empty:
+    stack3.push(stack2.pop())
+
+while stack3 is not empty:
+    stack1.push(stack3.pop())
+
