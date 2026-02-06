@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static project20280.stacksqueues.LinkedStack.convertToBinary;
 
 class LinkedStackTest {
 
@@ -59,4 +60,11 @@ class LinkedStackTest {
             s.push(i);
         assertEquals("[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]", s.toString());
     }
+
+    @Test
+ void testConvertToBinary() {
+         assertEquals("10111", convertToBinary(23));
+         assertEquals("111001000000101011000010011101010110110001100010000000000000",
+                convertToBinary(1027010000000000000L));
+         }
 }
