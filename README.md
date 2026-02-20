@@ -49,3 +49,71 @@ while stack2 is not empty:
 while stack3 is not empty:
     stack1.push(stack3.pop())
 
+lab3: 
+Q2
+
+Function countExternal(T,p):
+
+Takes in T and p(node) t being the tree itself we don't need it in the code implementation as its written inside the class.
+ifT.isExternal(p)
+Return 1;
+else
+Int count = 0;
+if(T.left(p) != null) then
+count = count + countExternal(T, T.left(p))
+if(T.right(p) != null) then
+Count = count + countExternal(T, T.right(p))
+Return count
+
+Q3
+
+countLeftExternal(p):
+
+if(p == null) then
+Return 0;
+else
+Int count = 0;
+if(left(p) != null): then
+if(isExternal(left(p)) then
+count++;
+else
+Count = count + countLeftExternal(left(p))
+
+if(right(p) != null)
+count = count + countLeftExternal(right(p));
+return count
+
+Q5 
+
+countDescendents(p)
+
+if(isExternal(p)) then
+Return 0
+Count = numChildren(p)
+For each child c in numChildren(p) do
+Count += countDescendandants(c)
+Return count
+
+
+
+
+lab4:
+
+Q5 diameter pseudocode:
+
+Algorithm findDiameter(p):
+if p is null:
+    return 0
+
+//Get the diameter of each subtree
+leftHeight = height_recursive(left(p))
+rightHeight = height_recursive(right(p))
+
+// Get the diameter of each subtree recursively
+leftDiameter = findDiameter(left(p))
+rightDiameter = findDiameter(right(p))
+
+return max(leftHeight + rightHeight + 3, max(leftDiameter, rightDiameter))
+
+
+
