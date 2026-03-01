@@ -94,6 +94,29 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E>{
         System.out.println(" Q6 Experiment");
         runQ6Experiment();
 
+        //Q9
+        Node<String> a = new Node<>("A", null, null,null);
+        Node<String> b = new Node<>("B", null, null,null);
+        Node<String> c = new Node<>("C", null, null,null);
+        Node<String> d = new Node<>("D", null, null,null);
+        Node<String> e = new Node<>("E", null, null,null);
+        Node<String> f = new Node<>("F", null, null,null);
+        Node<String> g = new Node<>("G", null, null,null);
+        Node<String> h = new Node<>("H", null, null,null);
+
+        // Link them according to the diagram
+        a.setLeft(b);
+        a.setRight(c);
+        b.setLeft(d);
+        b.setRight(e);
+        e.setLeft(g);
+        e.setRight(h);
+        c.setRight(f);
+
+        // Run the test
+        System.out.print("Leaf nodes: ");
+        printLeaves(a);
+
         System.out.println(" Q10 Experiment");
         createRandomTree();
 
@@ -559,7 +582,7 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E>{
     }
 
     //lab 5 Q9
-    public  void printLeaves(Node<E> node) {
+    public static <E> void printLeaves(Node<E> node) {
         if (node == null) return;
 
         // If it's a leaf, print it!
