@@ -94,6 +94,9 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E>{
         System.out.println(" Q6 Experiment");
         runQ6Experiment();
 
+        System.out.println(" Q10 Experiment");
+        createRandomTree();
+
 
     }
 
@@ -555,5 +558,42 @@ public class LinkedBinaryTree<E> extends AbstractBinaryTree<E>{
         }
     }
 
+    //lab 5 Q9
+    public  void printLeaves(Node<E> node) {
+        if (node == null) return;
+
+        // If it's a leaf, print it!
+        if (node.getLeft() == null && node.getRight() == null) {
+            System.out.print(node.getElement() + " ");
+        }
+
+        // Otherwise, keep looking down both sides
+        printLeaves(node.getLeft());
+        printLeaves(node.getRight());
+    }
+
+    //Q10
+
+    public static void createRandomTree() {
+
+            for (int n = 10; n <= 10000; n += 100) {
+                long totalTime = 0;
+                int trials = 50;
+
+                for (int i = 0; i < trials; i++) {
+                    LinkedBinaryTree<Integer> tree = LinkedBinaryTree.makeRandom(n);
+
+                    long start = System.nanoTime();
+                    tree.inorder(); // The method we are testing for Q10
+                    long end = System.nanoTime();
+
+                    totalTime += (end - start);
+                }
+
+                double avgTime = (double) totalTime / trials;
+                System.out.println(n + "," + avgTime);
+
+            }
+    }
 }
 

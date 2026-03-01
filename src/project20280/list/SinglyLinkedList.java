@@ -287,6 +287,43 @@ public class SinglyLinkedList<E> implements List<E> {
         return twin;
     }
 
+    //lab 5 q6 reversing a list
+    public void Q6reverse() {
+        if (head == null || head.next == null) return;
+        head = reverseRecursive(head);
+    }
+
+    private Node<E> reverseRecursive(Node<E> current) {
+
+        if (current.next == null) return current;
+
+        // Recursive step
+        Node newHead = reverseRecursive(current.next);
+
+        current.next.next = current;
+        current.next = null;
+
+        return newHead;
+    }
+
+    //lab 5 Q7 coping
+    public SinglyLinkedList<E> recursiveCopy() {
+        SinglyLinkedList<E> twin = new SinglyLinkedList<>();
+        twin.head = copyHelper(this.head);
+        twin.size = this.size;
+        return twin;
+    }
+
+    private Node<E> copyHelper(Node<E> current) {
+        if (current == null) return null;
+
+        Node<E> newNode = new Node<>(current.getElement(), null);
+
+        newNode.setNext(copyHelper(current.getNext()));
+
+        return newNode;
+    }
+
 
         public static void main(String[] args) {
         SinglyLinkedList<Integer> ll = new SinglyLinkedList<Integer>();

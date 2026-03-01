@@ -115,5 +115,36 @@ rightDiameter = findDiameter(right(p))
 
 return max(leftHeight + rightHeight + 3, max(leftDiameter, rightDiameter))
 
+lab 5:
+Q5)
+
+a) Binary format from decimal conversion
+
+b) 2468 = 100110100100.
+
+Q6)
+a)
+
+Algorithm printReverse(node):
+    if node is null
+     return
+    printReverse(node.next)
+    print node.value
+
+Q7)
+
+a)
+
+Algorithm copyRecursive(node):
+if node is null:
+return null
+    newNode = create Node(node.element)
+    newNode.next = copyRecursive(node.next)
+
+return newNode
+
+Q10)
+![img_1.png](img_1.png)
+
 
 
