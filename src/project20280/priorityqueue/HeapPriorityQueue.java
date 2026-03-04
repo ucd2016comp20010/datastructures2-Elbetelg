@@ -4,6 +4,7 @@ package project20280.priorityqueue;
  */
 
 import project20280.interfaces.Entry;
+import project20280.tree.LinkedBinaryTree;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -44,32 +45,36 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     public HeapPriorityQueue(K[] keys, V[] values) {
         // TODO
+        super();
+        for (int j=0; j < Math.min(keys.length, values.length); j++)
+            heap.add(new PQEntry<>(keys[j], values[j]));
+        heapify();
     }
 
     // protected utilities
     protected int parent(int j) {
         // TODO
-        return 0;
+        return (j - 1) / 2;
     }
 
-    protected int left(int j) {
+    protected static int left(int j) {
         // TODO
-        return 0;
+        return 2 * j + 1;
     }
 
-    protected int right(int j) {
+    protected static int right(int j) {
         // TODO
-        return 0;
+        return 2 * j + 2;
     }
 
     protected boolean hasLeft(int j) {
         // TODO
-        return false;
+        return left(j) < heap.size();
     }
 
     protected boolean hasRight(int j) {
         // TODO
-        return false;
+        return right(j) < heap.size();
     }
 
     /**
@@ -77,6 +82,9 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     protected void swap(int i, int j) {
         // TODO
+        Entry<K, V> temp = heap.get(i);
+        heap.set(i, heap.get(j));
+        heap.set(j, temp);
     }
 
     /**
@@ -85,6 +93,14 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     protected void upheap(int j) {
         // TODO
+        while(j > 0){
+            int p = parent(j);
+            if(compare(heap.get(j), heap.get(p)) >= 0){
+                break;
+            }
+            swap(j, p);
+            j = p;
+        }
     }
 
     /**
@@ -92,6 +108,21 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     protected void downheap(int j) {
         // TODO
+        while(hasLeft(j)) {
+            int leftIndex = left(j);
+            int smallChildIndex = leftIndex;
+            if (hasRight(j)) {
+                int rightIndex = right(j);
+                if (compare(heap.get(leftIndex), heap.get(rightIndex)) > 0) {
+                    smallChildIndex = rightIndex;
+                }
+            }
+            if (compare(heap.get(smallChildIndex), heap.get(j)) >= 0) {
+                break;
+            }
+            swap(j, smallChildIndex);
+            j = smallChildIndex;
+        }
     }
 
     /**
@@ -99,9 +130,12 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
      */
     protected void heapify() {
         // TODO
-    }
+        int startIndex = parent(size() - 1);
+        for (int j = (heap.size() / 2) - 1; j >= 0; j--){
+            downheap(j);
+        }
 
-    // public methods
+    }
 
     /**
      * Returns the number of items in the priority queue.
@@ -134,7 +168,11 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
     @Override
     public Entry<K, V> insert(K key, V value) throws IllegalArgumentException {
         // TODO
-        return null;
+        checkKey(key);
+        Entry<K,V> newest = new PQEntry<>(key, value);
+        heap.add(newest);
+        upheap(heap.size() - 1);
+        return newest;
     }
 
     /**
@@ -145,7 +183,16 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
     @Override
     public Entry<K, V> removeMin() {
         // TODO
-        return null;
+        if (heap.isEmpty()) return null;
+        Entry<K,V> min = heap.get(0);
+
+            swap(0, heap.size() - 1);
+            heap.remove(heap.size() - 1);
+
+            if(!heap.isEmpty()){
+                downheap(0);
+            }
+        return min;
     }
 
     public String toString() {
@@ -174,6 +221,86 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
         }
     }
 
+    //Q6
+    private static void pqSort(){
+        for (int n = 1000; n <= 1000000; n += 100000) {
+            long totalTime = 0;
+            int trials = 10;
+
+            for (int i = 0; i < trials; i++) {
+                Integer[] data = new Integer[n];
+                for (int j = 0; j < n; j++) data[j] = (int) (Math.random() * n);
+                HeapPriorityQueue<Integer, Integer> pq1 = new HeapPriorityQueue<>();
+
+                long start = System.nanoTime();
+
+                for(Integer val : data){
+                    pq1.insert(val,val);
+                }
+
+                while(!pq1.isEmpty()){
+                    pq1.removeMin();
+                }
+                long end = System.nanoTime();
+
+                totalTime += (end - start);
+            }
+
+            double avgTime = (double) totalTime / trials;
+            System.out.println(n + "," + avgTime);
+
+        }
+    }
+
+   private static void inPlaceHeapSort(){
+
+        for(int n = 1000; n <= 1000000; n += 100000){
+            long totalTime = 0;
+            int trials = 10;
+            for (int i = 0; i < trials; i++) {
+                Integer[] data = new Integer[n];
+                for (int j = 0; j < n; j++) data[j] = (int) (Math.random() * n);
+                long start = System.nanoTime();
+                for(int j = data.length/2 -1; j >= 0; j--){
+                    downheapInPlace(data,j,data.length);
+                }
+                for(int j = data.length -1; j > 0; j--){
+                    swapInPlace(data,0,j);
+                    downheapInPlace(data,0,j);
+                }
+                long end = System.nanoTime();
+                totalTime += (end - start);
+            }
+
+            double avgTime = (double) totalTime / trials;
+            System.out.println(n + "," + avgTime);
+        }
+
+    }
+    public static void swapInPlace(Integer[] data,int i,int j){
+        int temp = data[i];
+        data[i] = data[j];
+        data[j] = temp;
+    }
+
+    public  static void downheapInPlace(Integer[] data,int j,int limit){
+        while(left(j) < limit) {
+            int leftIndex = left(j);
+            int smallChildIndex = leftIndex;
+            if (right(j) < limit) {
+                int rightIndex = right(j);
+                if (data[leftIndex] > data[rightIndex]) {
+                    smallChildIndex = rightIndex;
+                }
+            }
+            if (data[smallChildIndex] >= data[j]) {
+                break;
+            }
+            swapInPlace(data,j, smallChildIndex);
+            j = smallChildIndex;
+        }
+    }
+/*
     public static void main(String[] args) {
         Integer[] rands = new Integer[]{35, 26, 15, 24, 33, 4, 12, 1, 23, 21, 2, 5};
         HeapPriorityQueue<Integer, Integer> pq = new HeapPriorityQueue<>(rands, rands);
@@ -189,5 +316,35 @@ public class HeapPriorityQueue<K, V> extends AbstractPriorityQueue<K, V> {
         //        2,            4,
         //   23,     21,      5, 12,
         // 24, 26, 35, 33, 15]
+    }*/
+
+    public static void main(String[] args) {
+        Integer[] rands = new Integer[]{35, 26, 15, 24, 33, 4, 12, 1, 23, 21, 2, 5};
+
+        // Way 1: Bottom-up construction (O(n))
+        System.out.println("--- Way 1: Bottom-up Heapify ---");
+        HeapPriorityQueue<Integer, Integer> pq1 = new HeapPriorityQueue<>(rands, rands);
+        System.out.println("After heapify: " + pq1);
+
+        // Way 2: Successive insertions (O(n log n))
+        System.out.println("\n--- Way 2: Successive Insertions ---");
+        HeapPriorityQueue<Integer, Integer> pq2 = new HeapPriorityQueue<>();
+        for(Integer i : rands) {
+            pq2.insert(i, i);
+        }
+        System.out.println("After insertions: " + pq2);
+
+        // Testing removeMin
+        System.out.println("\nMin element: " + pq1.min());
+        pq1.removeMin();
+        System.out.println("After removeMin: " + pq1);
+
+        System.out.println("\nQ6: PQSort Timing Measurements");
+        System.out.println("n,average_time_nanos");
+        pqSort();
+
+        System.out.println("\nQ7: InPlace heapSort Timing Measurements");
+        inPlaceHeapSort();
+
     }
 }
