@@ -53,7 +53,11 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
     @Override
     protected V bucketGet(int h, K k) {
         // TODO
-        return null;
+        UnsortedTableMap<K, V> t = table[h];
+        if(t == null){
+            return null;
+        }
+        return t.get(k);
     }
 
     /**
@@ -68,7 +72,14 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
     @Override
     protected V bucketPut(int h, K k, V v) {
         // TODO
-        return null;
+        UnsortedTableMap<K, V> t = table[h];
+        if(t == null){
+            t = table[h] = new UnsortedTableMap<>();
+        }
+        int oldSize = t.size();
+        V vOld = t.put(k,v);
+        n += (t.size() - oldSize);
+        return vOld;
     }
 
 
@@ -83,7 +94,14 @@ public class ChainHashMap<K, V> extends AbstractHashMap<K, V> {
     @Override
     protected V bucketRemove(int h, K k) {
         // TODO
-        return null;
+        UnsortedTableMap<K, V> t = table[h];
+        if(t == null){
+            return null;
+        }
+        int oldSize = t.size();
+        V vOld = t.remove(k);
+        n += (t.size() - oldSize);
+        return vOld;
     }
 
     /**

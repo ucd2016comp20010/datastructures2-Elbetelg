@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static java.util.Objects.compare;
+
+
 /**
  * An implementation of a map using an unsorted table.
  */
@@ -30,7 +33,13 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
      */
     private int findIndex(K key) {
         // TODO
-        return 0;
+        int n = table.size();
+        for (int j = 0; j < n; j++) {
+            if (table.get(j).getKey().equals(key)) {
+                return j;
+            }
+        }
+        return -1;
     }
 
     // public methods
@@ -55,7 +64,11 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
     @Override
     public V get(K key) {
         // TODO
-        return null;
+        int j = findIndex(key);
+        if(j == -1){
+            return null;
+        }
+        return table.get(j).getValue();
     }
 
     /**
@@ -71,7 +84,13 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
     @Override
     public V put(K key, V value) {
         // TODO
-        return null;
+        int j = findIndex(key);
+        if (j == -1) {
+            table.add(new MapEntry<>(key, value));
+            return null;
+        } else {
+            return table.get(j).setValue(value);
+        }
     }
 
     /**
@@ -85,7 +104,19 @@ public class UnsortedTableMap<K, V> extends AbstractMap<K, V> {
     @Override
     public V remove(K key) {
         // TODO
-        return null;
+        int j = findIndex(key);
+        int n = size();
+        if (j == -1) return null; // Key not found
+
+        V answer = table.get(j).getValue();
+
+        // Efficiency trick: if the element isn't the last one,
+        // move the last element into this gap to avoid shifting everything.
+        if (j != n - 1) {
+            table.set(j, table.get(n - 1));
+        }
+        table.remove(n - 1); // Remove the last element
+        return answer;
     }
 
     // ---------------- nested EntryIterator class ----------------
